@@ -1,0 +1,13 @@
+[
+    { "name": "Assembly",           "management": "production", "parent": null },
+    { "name": "Final Product",      "management": "production", "parent": null },
+    { "name": "Automatic Assembly", "management": "production", "parent": "Assembly" },
+    { "name": "Manual Assembly",    "management": "production", "parent": "Assembly" },
+    { "name": "Insert",             "management": "production", "parent": "Assembly" },
+    { "name": "Vacuum",             "management": "production", "parent": "Assembly" },
+    { "name": "Thermo Forming",     "management": "production", "parent": "Assembly" },
+    { "name": "Scissors",           "management": "production", "parent": "Assembly" },
+    { "name": "Packaging",          "management": "production", "parent": "Final Product"},
+    { "name": "Blister",            "management": "production", "parent": "Final Product"},
+    { "name": "Mini Blister",       "management": "production", "parent": "Final Product"}
+]

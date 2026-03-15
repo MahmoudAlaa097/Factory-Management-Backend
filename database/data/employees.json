@@ -1,0 +1,74 @@
+[
+    {
+        "username": "admin",
+        "name": "Admin",
+        "code": 1000,
+        "role": "admin",
+        "management": "production",
+        "division": "Assembly"
+    },
+    {
+        "username": "operator_01",
+        "name": "Operator 01",
+        "code": 1001,
+        "role": "operator",
+        "management": "production",
+        "division": "Automatic Assembly"
+    },
+    {
+        "username": "production_supervisor_01",
+        "name": "Production Supervisor 01",
+        "code": 1002,
+        "role": "supervisor",
+        "management": "production",
+        "division": "Automatic Assembly"
+    },
+    {
+        "username": "electrical_technician_01",
+        "name": "Electrical Technician 01",
+        "code": 1003,
+        "role": "technician",
+        "management": "electrical_maintenance",
+        "division": "Assembly"
+    },
+    {
+        "username": "mechanical_technician_01",
+        "name": "Mechanical Technician 01",
+        "code": 1004,
+        "role": "technician",
+        "management": "mechanical_maintenance",
+        "division": "Assembly"
+    },
+    {
+        "username": "electrical_supervisor_01",
+        "name": "Electrical Supervisor 01",
+        "code": 1005,
+        "role": "supervisor",
+        "management": "electrical_maintenance",
+        "division": "Assembly"
+    },
+    {
+        "username": "mechanical_supervisor_01",
+        "name": "Mechanical Supervisor 01",
+        "code": 1006,
+        "role": "supervisor",
+        "management": "mechanical_maintenance",
+        "division": "Assembly"
+    },
+    {
+        "username": "electrical_engineer_01",
+        "name": "Electrical Engineer 01",
+        "code": 1007,
+        "role": "engineer",
+        "management": "electrical_maintenance",
+        "division": "Assembly"
+    },
+    {
+        "username": "mechanical_engineer_01",
+        "name": "Mechanical Engineer 01",
+        "code": 1008,
+        "role": "engineer",
+        "management": "mechanical_maintenance",
+        "division": "Assembly"
+    }
+]

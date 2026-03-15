@@ -1,0 +1,4 @@
+[
+    { "machine_type": "D.L", "sections": ["D", "Track", "Vibrator", "Electronic", "Other"] },
+    { "machine_type": "C.L", "sections": ["D.L", "C.L", "Track", "Vibrator", "Electronic", "Other"] }
+]

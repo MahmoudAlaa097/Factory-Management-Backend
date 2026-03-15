@@ -1,0 +1,11 @@
+[
+    { "name": "Sensor",            "category": "electrical" },
+    { "name": "Electronic Cam",    "category": "electrical" },
+    { "name": "Encoder",           "category": "electrical" },
+    { "name": "PLC",               "category": "electrical" },
+    { "name": "Motors",            "category": "electrical" },
+    { "name": "Inverter",          "category": "electrical" },
+    { "name": "Switches",          "category": "electrical" },
+    { "name": "Cables",            "category": "electrical" },
+    { "name": "Electronic Boards", "category": "electrical" }
+]
