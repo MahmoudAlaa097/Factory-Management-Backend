@@ -8,9 +8,12 @@ use App\Models\Fault;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\AllowedFilter;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Spatie\QueryBuilder\QueryBuilder;
 use App\Http\Requests\Api\V1\StoreFaultRequest;
 use App\Models\Machine;
+use App\Models\Employee;
 
 
 class FaultService extends BaseService
@@ -164,6 +167,49 @@ class FaultService extends BaseService
             'closed_at'     => now(),
             'time_consumed' => (int) round($fault->reported_at->diffInMinutes(now())),
         ]);
+
+        return $fault->fresh();
+    }
+
+    public function assignTechnician(Fault $fault, int $technicianId): Fault
+    {
+        $technician = Employee::findOrFail($technicianId);
+
+        // Must be from correct maintenance management
+        if ($technician->management_id !== $fault->maintenance_management_id) {
+            throw new AuthorizationException(
+                'Technician must belong to the correct maintenance management.'
+            );
+        }
+
+        // Prevent duplicate assignment
+        if ($fault->technicians()->where('employees.id', $technicianId)->exists()) {
+            throw ValidationException::withMessages([
+                'technician_id' => ['Technician is already assigned to this fault.'],
+            ]);
+        }
+
+        $fault->technicians()->attach($technicianId, [
+            'assigned_at' => now(),
+        ]);
+
+        return $fault->fresh();
+    }
+
+    public function unassignTechnician(Fault $fault, \App\Models\Employee $employee): Fault
+    {
+        // Cannot unassign original responding technician
+        $originalTechnicianId = $fault->technicians()
+            ->orderBy('fault_technicians.assigned_at')
+            ->first()?->id;
+
+        if ($originalTechnicianId === $employee->id) {
+            throw ValidationException::withMessages([
+                'technician_id' => ['Cannot unassign the original responding technician.'],
+            ]);
+        }
+
+        $fault->technicians()->detach($employee->id);
 
         return $fault->fresh();
     }

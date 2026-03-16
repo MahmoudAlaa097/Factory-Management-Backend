@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\MachineSectionController;
 use App\Http\Controllers\Api\V1\ComponentTypeController;
 use App\Http\Controllers\Api\V1\MachineComponentController;
 use App\Http\Controllers\Api\V1\FaultController;
+use App\Http\Controllers\Api\V1\FaultTechnicianController;
 
 Route::prefix('/v1')->middleware('auth:sanctum')
     ->group(function () {
@@ -29,5 +30,10 @@ Route::prefix('/v1')->middleware('auth:sanctum')
             Route::patch('{fault}/accept',  [FaultController::class, 'accept']);
             Route::patch('{fault}/approve', [FaultController::class, 'approve']);
             Route::patch('{fault}/close',   [FaultController::class, 'close']);
+
+            Route::prefix('{fault}/technicians')->group(function () {
+                Route::post('/',              [FaultTechnicianController::class, 'store']);
+                Route::delete('{employee}',   [FaultTechnicianController::class, 'destroy']);
+            });
         });
     });

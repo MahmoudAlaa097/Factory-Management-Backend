@@ -32,9 +32,17 @@
         "division": "Assembly"
     },
     {
+        "username": "electrical_technician_02",
+        "name": "Electrical Technician 02",
+        "code": 1004,
+        "role": "technician",
+        "management": "electrical_maintenance",
+        "division": "Assembly"
+    },
+    {
         "username": "mechanical_technician_01",
         "name": "Mechanical Technician 01",
-        "code": 1004,
+        "code": 1005,
         "role": "technician",
         "management": "mechanical_maintenance",
         "division": "Assembly"
@@ -42,7 +50,7 @@
     {
         "username": "electrical_supervisor_01",
         "name": "Electrical Supervisor 01",
-        "code": 1005,
+        "code": 1006,
         "role": "supervisor",
         "management": "electrical_maintenance",
         "division": "Assembly"
@@ -50,7 +58,7 @@
     {
         "username": "mechanical_supervisor_01",
         "name": "Mechanical Supervisor 01",
-        "code": 1006,
+        "code": 1007,
         "role": "supervisor",
         "management": "mechanical_maintenance",
         "division": "Assembly"
@@ -58,7 +66,7 @@
     {
         "username": "electrical_engineer_01",
         "name": "Electrical Engineer 01",
-        "code": 1007,
+        "code": 1008,
         "role": "engineer",
         "management": "electrical_maintenance",
         "division": "Assembly"
@@ -66,7 +74,7 @@
     {
         "username": "mechanical_engineer_01",
         "name": "Mechanical Engineer 01",
-        "code": 1008,
+        "code": 1009,
         "role": "engineer",
         "management": "mechanical_maintenance",
         "division": "Assembly"
