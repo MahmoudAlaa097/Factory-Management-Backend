@@ -10,12 +10,14 @@ use App\Actions\V1\Fault\ReportFaultAction;
 use App\Actions\V1\Fault\ResolveFaultAction;
 use App\Actions\V1\Fault\RespondToFaultAction;
 use App\Actions\V1\Fault\ShowFaultAction;
+use App\Helpers\QueryScope;
 use App\Http\Requests\Api\V1\AcceptFaultRequest;
 use App\Http\Requests\Api\V1\ApproveMaintenanceFaultRequest;
 use App\Http\Requests\Api\V1\CloseFaultRequest;
 use App\Http\Requests\Api\V1\ListFaultsRequest;
 use App\Http\Requests\Api\V1\ResolveFaultRequest;
 use App\Http\Requests\Api\V1\RespondToFaultRequest;
+use App\Http\Requests\Api\V1\ShowFaultRequest;
 use App\Http\Requests\Api\V1\StoreFaultRequest;
 use App\Http\Resources\V1\FaultResource;
 use App\Http\Responses\ApiResponse;
@@ -48,8 +50,12 @@ class FaultController extends BaseController
         );
     }
 
-    public function show(Fault $fault): JsonResponse
+    public function show(ShowFaultRequest $request, int $id): JsonResponse
     {
+        $fault = $this->findScopedFault($request->user(), $id, [
+            'machine', 'technicians', 'components'
+        ]);
+
         $this->authorize('view', $fault);
 
         $fault = $this->showAction->execute($fault);
@@ -62,6 +68,8 @@ class FaultController extends BaseController
 
     public function store(StoreFaultRequest $request): JsonResponse
     {
+        $this->authorize('create', Fault::class);
+
         $fault = $this->reportAction->execute($request, $request->user());
 
         return ApiResponse::success(
@@ -72,52 +80,72 @@ class FaultController extends BaseController
         );
     }
 
-    public function respond(RespondToFaultRequest $request, Fault $fault): JsonResponse
+    public function respond(RespondToFaultRequest $request, int $id): JsonResponse
     {
+        $fault = $this->findScopedFault($request->user(), $id);
+
+        $this->authorize('respond', $fault);
+
         $fault = $this->respondAction->execute($request, $fault, $request->user());
 
-        return ApiResponse::success(
-            'Fault is now in progress',
-            new FaultResource($fault)
-        );
+        return $this->successAction('Fault is now in progress', $fault);
     }
 
-    public function resolve(ResolveFaultRequest $request, Fault $fault): JsonResponse
+    public function resolve(ResolveFaultRequest $request, int $id): JsonResponse
     {
+        $fault = $this->findScopedFault($request->user(), $id);
+
+        $this->authorize('resolve', $fault);
+
         $fault = $this->resolveAction->execute($fault);
 
-        return ApiResponse::success(
-            'Fault resolved successfully',
-            new FaultResource($fault)
-        );
+        return $this->successAction('Fault resolved successfully', $fault);
     }
 
-    public function accept(AcceptFaultRequest $request, Fault $fault): JsonResponse
+    public function accept(AcceptFaultRequest $request, int $id): JsonResponse
     {
+        $fault = $this->findScopedFault($request->user(), $id);
+
+        $this->authorize('accept', $fault);
+
         $fault = $this->acceptAction->execute($fault);
 
-        return ApiResponse::success(
-            'Fault accepted successfully',
-            new FaultResource($fault)
-        );
+        return $this->successAction('Fault accepted successfully', $fault);
     }
 
-    public function approve(ApproveMaintenanceFaultRequest $request, Fault $fault): JsonResponse
+    public function approve(ApproveMaintenanceFaultRequest $request, int $id): JsonResponse
     {
+        $fault = $this->findScopedFault($request->user(), $id);
+
+        $this->authorize('approve', $fault);
+
         $fault = $this->approveAction->execute($fault, $request->user());
 
-        return ApiResponse::success(
-            'Fault approved by maintenance successfully',
-            new FaultResource($fault)
-        );
+        return $this->successAction('Fault approved by maintenance successfully', $fault);
     }
 
-    public function close(CloseFaultRequest $request, Fault $fault): JsonResponse
+    public function close(CloseFaultRequest $request, int $id): JsonResponse
     {
+        $fault = $this->findScopedFault($request->user(), $id);
+
+        $this->authorize('close', $fault);
+
         $fault = $this->closeAction->execute($fault, $request->user());
 
+        return $this->successAction('Fault closed successfully', $fault);
+    }
+
+    private function findScopedFault($user, int $id, array $with = []): Fault
+    {
+        return QueryScope::faults($user)
+            ->when($with, fn ($q) => $q->with($with))
+            ->findOrFail($id);
+    }
+
+    private function successAction(string $message, Fault $fault): JsonResponse
+    {
         return ApiResponse::success(
-            'Fault closed successfully',
+            $message,
             new FaultResource($fault)
         );
     }
