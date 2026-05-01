@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\ComponentAction;
 
 return new class extends Migration
 {
@@ -15,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('fault_id')->constrained('faults')->cascadeOnDelete();
             $table->foreignId('machine_component_id')->constrained('machine_components')->cascadeOnDelete();
+            $table->enum('action', array_column(ComponentAction::cases(), 'value'))
+                  ->after('machine_component_id');
             $table->text('notes')->nullable();
             $table->timestamps();
 

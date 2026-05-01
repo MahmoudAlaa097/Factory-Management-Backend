@@ -11,6 +11,8 @@ class FaultComponentResource extends JsonResource
     {
         return [
             'id'        => $this->id,
+            'action'    => $this->action->value,
+            'action_label' => $this->action->label(app()->getLocale()),
             'notes'     => $this->notes,
             'component' => new MachineComponentResource($this->whenLoaded('component')),
             'created_at' => $this->created_at,

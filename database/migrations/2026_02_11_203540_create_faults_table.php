@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('closed_by')->nullable()->constrained('employees')->nullOnDelete();
             $table->enum('status', array_column(FaultStatus::cases(), 'value'))->default(FaultStatus::Open->value);
             $table->text('description');
+            $table->text('resolution_notes')->nullable()->after('description');
             $table->timestamp('reported_at');
             $table->timestamp('technician_started_at')->nullable();
             $table->timestamp('resolved_at')->nullable();

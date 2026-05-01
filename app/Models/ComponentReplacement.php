@@ -10,13 +10,14 @@ class ComponentReplacement extends Model
     protected $fillable = [
         'fault_id',
         'machine_id',
-        'old_component_id',
-        'new_component_id',
+        'machine_component_id',
         'replaced_by',
+        'is_new',
         'replaced_at',
     ];
 
     protected $casts = [
+        'is_new'      => 'boolean',
         'replaced_at' => 'datetime',
     ];
 
@@ -31,14 +32,9 @@ class ComponentReplacement extends Model
         return $this->belongsTo(Machine::class);
     }
 
-    public function oldComponent(): BelongsTo
+    public function component(): BelongsTo
     {
-        return $this->belongsTo(MachineComponent::class, 'old_component_id');
-    }
-
-    public function newComponent(): BelongsTo
-    {
-        return $this->belongsTo(MachineComponent::class, 'new_component_id');
+        return $this->belongsTo(MachineComponent::class, 'machine_component_id');
     }
 
     public function replacedBy(): BelongsTo

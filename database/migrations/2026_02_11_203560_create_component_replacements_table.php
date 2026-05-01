@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('fault_id')->constrained('faults')->cascadeOnDelete();
             $table->foreignId('machine_id')->constrained('machines')->cascadeOnDelete();
-            $table->foreignId('old_component_id')->constrained('machine_components')->cascadeOnDelete();
-            $table->foreignId('new_component_id')->constrained('machine_components')->cascadeOnDelete();
+            $table->foreignId('machine_component_id')->constrained('machine_components')->cascadeOnDelete();
             $table->foreignId('replaced_by')->constrained('employees')->cascadeOnDelete();
+            $table->boolean('is_new');
             $table->timestamp('replaced_at');
             $table->timestamps();
         });
