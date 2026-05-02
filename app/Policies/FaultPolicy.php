@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Fault;
 use App\Enums\FaultStatus;
+use App\Support\UserContext;
 
 class FaultPolicy extends BasePolicy
 {
@@ -63,7 +64,7 @@ class FaultPolicy extends BasePolicy
         }
 
         // Maintenance — scoped to their management
-        if ($this->faultInUserManagement($user, $fault)) {
+        if (UserContext::ownsFaultManagement($user, $fault)) {
             // Technician: open/in_progress faults + their assigned faults
             if ($this->isMaintenanceTechnician($user)) {
                 return $fault->status->is(FaultStatus::Open)
@@ -76,7 +77,7 @@ class FaultPolicy extends BasePolicy
         }
 
         // Production — scoped to their division
-        if ($this->faultInUserDivision($user, $fault)) {
+        if (UserContext::ownsFaultDivision($user, $fault)) {
             // Operator: own faults only
             if ($this->isProductionOperator($user)) {
                 return $fault->reported_by === $user->employee->id;
@@ -96,14 +97,13 @@ class FaultPolicy extends BasePolicy
     public function create(User $user): bool
     {
         return $this->isProductionOperator($user)
-            || $this->isProductionSupervisor($user)
-            || $this->isProductionEngineer($user);
+            || ($this->isEngineer($user) && $this->isProduction($user));
     }
 
     public function respond(User $user, Fault $fault): bool
     {
         return $this->canRespond($fault)
-            && $this->faultInUserManagement($user, $fault)
+            && UserContext::ownsFaultManagement($user, $fault)
             && (
                 $this->isMaintenanceTechnician($user)
                 || $this->isMaintenanceSupervisor($user)
@@ -116,7 +116,7 @@ class FaultPolicy extends BasePolicy
             return false;
         }
 
-        if (! $this->faultInUserManagement($user, $fault)) {
+        if (! UserContext::ownsFaultManagement($user, $fault)) {
             return false;
         }
 
@@ -136,26 +136,27 @@ class FaultPolicy extends BasePolicy
     public function accept(User $user, Fault $fault): bool
     {
         return $this->canAccept($fault)
-            && $this->faultInUserDivision($user, $fault)
+            && UserContext::ownsFaultDivision($user, $fault)
             && (
                 $this->isProductionOperator($user)
                 || $this->isProductionSupervisor($user)
-                || $this->isProductionEngineer($user)
+                || ($this->isEngineer($user) && $this->isProduction($user))
             );
     }
 
     public function approve(User $user, Fault $fault): bool
     {
         return $this->canApprove($fault)
-            && $this->faultInUserManagement($user, $fault)
+            && UserContext::ownsFaultManagement($user, $fault)
             && $this->isMaintenanceSupervisor($user);
     }
 
     public function close(User $user, Fault $fault): bool
     {
         return $this->canClose($fault)
-            && $this->faultInUserManagement($user, $fault)
-            && $this->isMaintenanceEngineer($user);
+            && UserContext::ownsFaultManagement($user, $fault)
+            && $this->isEngineer($user)
+            && $this->isMaintenance($user);
     }
 
     // -----------------------------------------------------------------------
@@ -165,10 +166,10 @@ class FaultPolicy extends BasePolicy
     public function assignTechnician(User $user, Fault $fault): bool
     {
         return $this->canResolve($fault)
-            && $this->faultInUserManagement($user, $fault)
+            && UserContext::ownsFaultManagement($user, $fault)
             && (
                 $this->isMaintenanceSupervisor($user)
-                || $this->isMaintenanceEngineer($user)
+                || ($this->isEngineer($user) && $this->isMaintenance($user))
             );
     }
 
@@ -184,11 +185,11 @@ class FaultPolicy extends BasePolicy
     public function manageComponents(User $user, Fault $fault): bool
     {
         return $this->canResolve($fault)
-            && $this->faultInUserManagement($user, $fault)
+            && UserContext::ownsFaultManagement($user, $fault)
             && (
                 $this->isMaintenanceTechnician($user)
                 || $this->isMaintenanceSupervisor($user)
-                || $this->isMaintenanceEngineer($user)
+                || ($this->isEngineer($user) && $this->isMaintenance($user))
             );
     }
 
@@ -199,7 +200,7 @@ class FaultPolicy extends BasePolicy
     public function logReplacement(User $user, Fault $fault): bool
     {
         return $this->canResolve($fault)
-            && $this->faultInUserManagement($user, $fault)
+            && UserContext::ownsFaultManagement($user, $fault)
             && (
                 $this->isMaintenanceTechnician($user)
                 || $this->isMaintenanceSupervisor($user)
@@ -208,20 +209,20 @@ class FaultPolicy extends BasePolicy
 
     public function updateResolution(User $user, Fault $fault): bool
     {
-        if (! $this->faultInUserManagement($user, $fault)) {
+        if (! UserContext::ownsFaultManagement($user, $fault)) {
             return false;
         }
 
         // Closed — engineer and manager only
         if ($fault->status->is(FaultStatus::Closed)) {
-            return $this->isMaintenanceEngineer($user)
-            || $this->isMaintenanceManager($user);
+            return ($this->isEngineer($user) || $this->isManager($user))
+                && $this->isMaintenance($user);
         }
 
         // in_progress through maintenance_approved — supervisor, engineer, manager
         return $this->isMaintenanceSupervisor($user)
-            || $this->isMaintenanceEngineer($user)
-            || $this->isMaintenanceManager($user);
+            || ($this->isEngineer($user) && $this->isMaintenance($user))
+            || ($this->isManager($user) && $this->isMaintenance($user));
     }
 
     public function viewReplacements(User $user, Fault $fault): bool
@@ -229,7 +230,7 @@ class FaultPolicy extends BasePolicy
         return $this->isAdmin($user)
             || (
                 $this->isMaintenance($user)
-                && $this->faultInUserManagement($user, $fault)
+                && UserContext::ownsFaultManagement($user, $fault)
             );
     }
 }

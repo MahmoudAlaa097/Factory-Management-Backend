@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\V1\FaultController;
 use App\Http\Controllers\Api\V1\FaultTechnicianController;
 use App\Http\Controllers\Api\V1\FaultComponentController;
 use App\Http\Controllers\Api\V1\ComponentReplacementController;
+use App\Http\Controllers\Api\V1\DashboardController;
 
 Route::prefix('/v1')->middleware('auth:sanctum')
     ->group(function () {
@@ -49,5 +50,12 @@ Route::prefix('/v1')->middleware('auth:sanctum')
                 Route::get('{componentReplacement}',     [ComponentReplacementController::class, 'show']);
                 Route::post('/',                         [ComponentReplacementController::class, 'store']);
             });
+        });
+
+        Route::prefix('dashboard')->group(function () {
+            Route::get('kpis',        [DashboardController::class, 'kpis']);
+            Route::get('machines',    [DashboardController::class, 'machines']);
+            Route::get('technicians', [DashboardController::class, 'technicians']);
+            Route::get('activity',    [DashboardController::class, 'activity']);
         });
     });

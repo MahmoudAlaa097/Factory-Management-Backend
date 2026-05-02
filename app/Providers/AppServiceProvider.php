@@ -22,7 +22,8 @@ use App\Models\MachineComponent;
 use App\Policies\MachineComponentPolicy;
 use App\Models\Fault;
 use App\Policies\FaultPolicy;
-
+use App\Models\Dashboard;
+use App\Policies\DashboardPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -48,5 +49,6 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(ComponentType::class, ComponentTypePolicy::class);
         Gate::policy(MachineComponent::class, MachineComponentPolicy::class);
         Gate::policy(Fault::class, FaultPolicy::class);
+        Gate::policy(Dashboard::class, DashboardPolicy::class);
     }
 }
