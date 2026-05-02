@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Resources\V1\DashboardMachineResource;
 use App\Http\Responses\ApiResponse;
 use App\Models\Dashboard;
 use App\Services\DashboardService;
@@ -32,9 +33,11 @@ class DashboardController extends BaseController
         $dateFrom = $request->date('date_from', 'Y-m-d') ?? now()->startOfMonth();
         $dateTo   = $request->date('date_to', 'Y-m-d')   ?? now()->endOfDay();
 
+        $machines = $this->service->machines($request->user(), $dateFrom, $dateTo);
+
         return ApiResponse::success(
             'Dashboard machines',
-            $this->service->machines($request->user(), $dateFrom, $dateTo)
+            DashboardMachineResource::collection($machines)
         );
     }
 
