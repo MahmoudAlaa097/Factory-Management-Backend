@@ -1,0 +1,188 @@
+[
+    {
+        "machine_id": 3,
+        "logged_by": 1,
+        "type": "fault",
+        "date": "2026-05-17",
+        "duration_minutes": 45,
+        "notes": "استبدال T.C تالف",
+        "technician_ids": [6, 7],
+        "affected_components": [
+            { "section_id": 1, "component_id": 1 }
+        ]
+    },
+    {
+        "machine_id": 7,
+        "logged_by": 1,
+        "type": "fault",
+        "date": "2026-05-17",
+        "duration_minutes": 30,
+        "notes": "إصلاح Hand",
+        "technician_ids": [8],
+        "affected_components": [
+            { "section_id": 2, "component_id": 10 }
+        ]
+    },
+    {
+        "machine_id": 12,
+        "logged_by": 1,
+        "type": "fault",
+        "date": "2026-05-17",
+        "duration_minutes": 60,
+        "notes": "عطل في الإنكودر",
+        "technician_ids": [9, 10],
+        "affected_components": [
+            { "section_id": 6, "component_id": 33 }
+        ]
+    },
+    {
+        "machine_id": 15,
+        "logged_by": 1,
+        "type": "fault",
+        "date": "2026-05-17",
+        "duration_minutes": 25,
+        "notes": "استبدال موس علوي",
+        "technician_ids": [11],
+        "affected_components": [
+            { "section_id": 1, "component_id": 2 }
+        ]
+    },
+    {
+        "machine_id": 20,
+        "logged_by": 1,
+        "type": "fault",
+        "date": "2026-05-17",
+        "duration_minutes": 90,
+        "notes": "عطل في PLC تم استبداله",
+        "technician_ids": [12, 13],
+        "affected_components": [
+            { "section_id": 6, "component_id": 36 }
+        ]
+    },
+    {
+        "machine_id": 5,
+        "logged_by": 1,
+        "type": "fault",
+        "date": "2026-05-17",
+        "duration_minutes": 20,
+        "notes": null,
+        "technician_ids": [14],
+        "affected_components": [
+            { "section_id": 3, "component_id": 14 }
+        ]
+    },
+    {
+        "machine_id": 1,
+        "logged_by": 1,
+        "type": "preventive",
+        "date": "2026-05-17",
+        "duration_minutes": 40,
+        "maintenance_type": "تشحيم",
+        "notes": null,
+        "technician_ids": [6, 8],
+        "affected_components": []
+    },
+    {
+        "machine_id": 10,
+        "logged_by": 1,
+        "type": "preventive",
+        "date": "2026-05-17",
+        "duration_minutes": 35,
+        "maintenance_type": "فحص دوري",
+        "notes": "تم فحص جميع الوصلات",
+        "technician_ids": [9],
+        "affected_components": []
+    },
+    {
+        "machine_id": 25,
+        "logged_by": 1,
+        "type": "preventive",
+        "date": "2026-05-17",
+        "duration_minutes": 50,
+        "maintenance_type": "استبدال أحزمة",
+        "notes": null,
+        "technician_ids": [15, 16],
+        "affected_components": []
+    },
+    {
+        "machine_id": 30,
+        "logged_by": 1,
+        "type": "preventive",
+        "date": "2026-05-17",
+        "duration_minutes": 30,
+        "maintenance_type": "تنظيف",
+        "notes": "تنظيف شامل للماكينة",
+        "technician_ids": [10],
+        "affected_components": []
+    },
+    {
+        "machine_id": null,
+        "logged_by": 1,
+        "type": "task",
+        "date": "2026-05-17",
+        "duration_minutes": 120,
+        "task_title": "تركيب لوحة كهربائية جديدة في قسم التجميع",
+        "task_tag": "BRC",
+        "requester_type": "App\\Models\\Division",
+        "requester_id": 3,
+        "notes": null,
+        "technician_ids": [6, 7, 8],
+        "affected_components": []
+    },
+    {
+        "machine_id": null,
+        "logged_by": 1,
+        "type": "task",
+        "date": "2026-05-17",
+        "duration_minutes": 60,
+        "task_title": "إصلاح إضاءة خط الإنتاج",
+        "task_tag": "أعمال تكميلية",
+        "requester_type": "App\\Models\\Division",
+        "requester_id": 3,
+        "notes": "تم استبدال 4 لمبات فلورسنت",
+        "technician_ids": [11],
+        "affected_components": []
+    },
+    {
+        "machine_id": null,
+        "logged_by": 1,
+        "type": "task",
+        "date": "2026-05-17",
+        "duration_minutes": 45,
+        "task_title": "مد كابلات لماكينة جديدة",
+        "task_tag": "BRC",
+        "requester_type": "App\\Models\\Management",
+        "requester_id": 2,
+        "notes": null,
+        "technician_ids": [12, 13],
+        "affected_components": []
+    },
+    {
+        "machine_id": null,
+        "logged_by": 1,
+        "type": "task",
+        "date": "2026-05-17",
+        "duration_minutes": 30,
+        "task_title": "فحص لوحة التحكم الرئيسية",
+        "task_tag": "أعمال أخرى",
+        "requester_type": "App\\Models\\Management",
+        "requester_id": 2,
+        "notes": "لا توجد مشاكل",
+        "technician_ids": [14],
+        "affected_components": []
+    },
+    {
+        "machine_id": null,
+        "logged_by": 1,
+        "type": "task",
+        "date": "2026-05-17",
+        "duration_minutes": 75,
+        "task_title": "تركيب سنسورات جديدة",
+        "task_tag": "BRC",
+        "requester_type": "App\\Models\\Division",
+        "requester_id": 3,
+        "notes": "تم تركيب 6 سنسورات",
+        "technician_ids": [15, 16],
+        "affected_components": []
+    }
+]

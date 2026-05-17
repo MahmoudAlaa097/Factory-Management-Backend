@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EmployeeSeeder::class,
             FaultSeeder::class,
+            WorkOrderSeeder::class,
         ]);
     }
 }
